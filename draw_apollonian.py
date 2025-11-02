@@ -102,6 +102,7 @@ def initial_three_equal(radius=1.0):
         ri0, rii = ri[0], ri[i + 1]
         A.append([2 * (xi - x0), 2 * (yi - y0)])
         b.append((xi * xi + yi * yi - rii * rii) - (x0 * x0 + y0 * y0 - ri0 * ri0))
+    # center and radius of outer circle is solved from linear system
     A = np.array(A)
     b = np.array(b)
     sol = np.linalg.lstsq(A, b, rcond=None)[0]
@@ -135,21 +136,23 @@ def initial_three_unequal(r1=1.0, r2=0.8, r3=0.6):
     add_circle_if_new(circles, 1 / r3, c3)
 
     # Find outer circle tangent to all three
-    ci = [c1, c2, c3]
-    ri = [r1, r2, r3]
-    A, b = [], []
-    for i in range(2):
-        x0, y0 = ci[0].real, ci[0].imag
-        xi, yi = ci[i + 1].real, ci[i + 1].imag
-        ri0, rii = ri[0], ri[i + 1]
-        A.append([2 * (xi - x0), 2 * (yi - y0)])
-        b.append((xi * xi + yi * yi - rii * rii) - (x0 * x0 + y0 * y0 - ri0 * ri0))
-    A, b = np.array(A), np.array(b)
-    sol = np.linalg.lstsq(A, b, rcond=None)[0]
-    Z = complex(sol[0], sol[1])
-    R = ri[0] + abs(Z - ci[0])
-    k_outer = -1.0 / R
-    add_circle_if_new(circles, k_outer, Z)
+    # ci = [c1, c2, c3]
+    # ri = [r1, r2, r3]
+    # A = []
+    # b = []
+    # for i in range(2):
+    #     x0, y0 = ci[0].real, ci[0].imag
+    #     xi, yi = ci[i + 1].real, ci[i + 1].imag
+    #     ri0, rii = ri[0], ri[i + 1]
+    #     A.append([2 * (xi - x0), 2 * (yi - y0)])
+    #     b.append((xi * xi + yi * yi - rii * rii) - (x0 * x0 + y0 * y0 - ri0 * ri0))
+    # A = np.array(A)
+    # b = np.array(b)
+    # sol = np.linalg.lstsq(A, b, rcond=None)[0]
+    # Z = complex(sol[0], sol[1])
+    # R = ri[0] + abs(Z - ci[0])
+    # k_outer = -1.0 / R
+    # add_circle_if_new(circles, k_outer, Z)
     return circles
 
 
@@ -295,3 +298,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # circles = initial_three_unequal(1.0, 0.8, 0.6)
+    # circles = build_apollonian(circles)
+    # plot_circles(circles, show=True, outpath=None, cmap='viridis')
